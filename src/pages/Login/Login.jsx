@@ -6,11 +6,14 @@ import {FcGoogle} from 'react-icons/fc';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword,GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
+import { useDispatch } from 'react-redux';
+import { userLoginInfo } from '../../slices/userSlice';
 
 const Login = () => {
     
 // ! Mechanical part:
     const auth = getAuth();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const provider = new GoogleAuthProvider();
 
@@ -59,8 +62,11 @@ const Login = () => {
 
         // ! Firebase:
         signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
+        .then((user) => {
           toast.success('login successfully done');
+          dispatch(userLoginInfo(user.user))
+          localStorage.setItem('userLoginInfo', JSON.stringify(userLoginInfo(user.user)));
+
           setTimeout(() => {
             navigate('/')
           },3000)
@@ -81,7 +87,7 @@ const Login = () => {
     const googleSignIn = () => {
       signInWithPopup(auth, provider)
         .then(() => {
-          toast.success('sig in successfully')
+          toast.success('sign in successfully')
           setTimeout(() => {
             navigate('/')
           }, 3000)
@@ -94,6 +100,9 @@ const Login = () => {
     //! forgot pass:
     const handleForgotPass = () => {
       setForgotPass(true)
+    }
+    const cancelForgotPass = () => {
+      setForgotPass(false)
     }
 
     const submitForgotPass = () => {
@@ -181,7 +190,7 @@ const Login = () => {
             </div>
             <div className='w-[368px]'>
                   <button onClick={handleClick} className='bg-primary rounded-[8.7px] text-center py-[21px] w-full'>
-                      <a className=' font-sans font-semibold text-[21px] text-white' href="">Login to Continue</a>
+                      <p className=' font-sans font-semibold text-[21px] text-white'>Login to Continue</p>
                   </button>
                   <p className='mt-[35px] font-sans text-[15px] text-[#03014C] text-center'>Don’t have an account ? <span className='font-bold text-[#EA6C00]'><a href="./Registration">Sign Up</a></span></p>
                   <p onClick={handleForgotPass} className='text-center font-sans text-[14px] text-[#EA6C00] mt-[30px] cursor-pointer'>Forgot password?</p>
@@ -196,7 +205,7 @@ const Login = () => {
       {
         forgotPass &&
         <div className='absolute top-0 left-0 w-full h-screen bg-primary flex justify-center items-center'>
-          <div className='bg-white py-[100px] px-[200px]'>
+          <div className='bg-white py-[100px] px-[200px] rounded-lg'>
 
               <h2 className='font-sans font-bold text-[34px] text-secondary'>Forgot Password?</h2>
               <div className='relative mt-[30px] w-[392px] m-auto'>
@@ -210,10 +219,10 @@ const Login = () => {
 
               <div className='w-[392px] mt-[15px] flex m-auto'>
               <button onClick={submitForgotPass} className='bg-primary rounded-[8.7px] text-center py-[21px] w-full'>
-                      <a className='font-sans font-semibold text-[21px] text-white' href="">Submit</a>
+                      <p className='font-sans font-semibold text-[21px] text-white'>Submit</p>
               </button>
-              <button className='ml-[10px] bg-primary rounded-[8.7px] text-center py-[21px] w-full'>
-                      <a className='font-sans font-semibold text-[21px] text-white' href="">Back to Login</a>
+              <button onClick={cancelForgotPass} className='ml-[10px] bg-primary rounded-[8.7px] text-center py-[21px] w-full'>
+                      <p className='font-sans font-semibold text-[21px] text-white'>Back to Login</p>
               </button>
               </div>
 

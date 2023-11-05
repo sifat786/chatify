@@ -144,7 +144,7 @@ const Registration = () => {
           </div>
           <div className='w-[368px]'>
                 <button onClick={handleClick} className='bg-primary rounded-[86px] text-center py-[21px] w-full'>
-                    <a className=' font-nunito font-semibold text-[21px] text-white' href="">Sign Up</a>
+                    <p className=' font-nunito font-semibold text-[21px] text-white'>Sign Up</p>
                 </button>
                 <p className='mt-[35px] font-sans text-[15px] text-[#03014C] text-center'>Already  have an account ? <span className='font-bold text-[#EA6C00]'><a href="./Login">Sign In</a></span></p>
           </div>
