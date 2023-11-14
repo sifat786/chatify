@@ -4,7 +4,7 @@ import registration from '../../assets/registration.png';
 import {RiEyeFill,RiEyeOffFill} from 'react-icons/ri';
 
 import { ToastContainer, toast } from 'react-toastify';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 // import LoadingSpinner from "./LoadingSpinner";
 
@@ -64,20 +64,25 @@ const Registration = () => {
 
         createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
-          sendEmailVerification(auth.currentUser)
-          .then(() => {
-            toast.success('registration done. please verify your email');
-            setEmail('');
-            setName('');
-            setPassword('');
-            setTimeout(() => {
+
+          updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: "./src/assets/profile.png"
+
+          }).then(() => {
+              sendEmailVerification(auth.currentUser)
+              toast.success('registration done. please verify your email');
+              setEmail('');
+              setName('');
+              setPassword('');
+              setTimeout(() => {
                 navigate('/Login')
-            },3000)
-          });
-        })
-        .catch((error) => {
+              },3000)
+
+          })
+          
+        }).catch((error) => {
           const errorCode = error.code;
-          console.log(errorCode);
           if(errorCode.includes('auth/email-already-in-use')) {
               setEmailerr('Email already exist !!!')
           }

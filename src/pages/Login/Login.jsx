@@ -221,7 +221,7 @@ const Login = () => {
               <button onClick={submitForgotPass} className='bg-primary rounded-[8.7px] text-center py-[21px] w-full'>
                       <p className='font-sans font-semibold text-[21px] text-white'>Submit</p>
               </button>
-              <button onClick={cancelForgotPass} className='ml-[10px] bg-primary rounded-[8.7px] text-center py-[21px] w-full'>
+              <button onClick={cancelForgotPass} className='ml-[10px] bg-red-500 rounded-[8.7px] text-center py-[21px] w-full'>
                       <p className='font-sans font-semibold text-[21px] text-white'>Back to Login</p>
               </button>
               </div>

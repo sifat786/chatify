@@ -15,7 +15,7 @@ export default {
         'primary': '#5F35F5',
         'secondary': '#11175D',
         'third': 'rgba(77, 77, 77, 0.75)',
-        'shadow': '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+        'shadow': 'rgba(0, 0, 0, 0.40)',
       }
     },
   },
