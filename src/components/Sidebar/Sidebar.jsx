@@ -79,7 +79,7 @@ const Sidebar = () => {
         uploadString(storageRef, message4, 'data_url').then((snapshot) => {
           console.log('Uploaded a data_url string!');
 
-        getDownloadURL(uploadData.snapshot.ref).then((downloadURL) => {
+        getDownloadURL(storageRef).then((downloadURL) => {
           console.log('File available at', downloadURL);
           updateProfile(auth.currentUser, {
             photoURL: downloadURL
@@ -99,7 +99,7 @@ const Sidebar = () => {
 
     <div className='bg-primary h-screen rounded-lg pt-[38px]'>
         <div className='group relative w-[100px] h-[100px] mx-auto'>
-          <img src={profile} alt="profile" className='mx-auto'/>
+          <img src={data.photoURL} alt="profile" className='mx-auto'/>
           <div onClick={handleImageUpload} className='bg-shadow opacity-0 group-hover:opacity-100 rounded-full w-full h-full mx-auto     absolute top-0 left-0 flex justify-center items-center transition duration-300 ease-in-out cursor-pointer'>
               <FaCloudUploadAlt className='text-[#EBEAEA] text-[25px]'/>
           </div>
