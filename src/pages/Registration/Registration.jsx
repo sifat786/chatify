@@ -1,10 +1,10 @@
-
 import { useState } from 'react';
 import registration from '../../assets/registration.png';
 import {RiEyeFill,RiEyeOffFill} from 'react-icons/ri';
 
 import { ToastContainer, toast } from 'react-toastify';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 // import LoadingSpinner from "./LoadingSpinner";
 
@@ -14,6 +14,7 @@ const Registration = () => {
   // ! Declaration:
   const auth = getAuth();
   const navigate = useNavigate();
+  const db = getDatabase();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -63,12 +64,10 @@ const Registration = () => {
       if(email && name && password && /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email) &&/(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(password)) {
 
         createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
-
+        .then((user) => {
           updateProfile(auth.currentUser, {
             displayName: name,
             photoURL: "./src/assets/profile.png"
-
           }).then(() => {
               sendEmailVerification(auth.currentUser)
               toast.success('registration done. please verify your email');
@@ -78,15 +77,19 @@ const Registration = () => {
               setTimeout(() => {
                 navigate('/Login')
               },3000)
-
+              console.log(user, 'sifat');
+          }).then(() => {
+            set(ref(db, 'users/' +user.user.uid), {
+              username: user.user.displayName,
+              email: user.user.email,
+            });
           })
-          
         }).catch((error) => {
           const errorCode = error.code;
           if(errorCode.includes('auth/email-already-in-use')) {
               setEmailerr('Email already exist !!!')
-          }
-        });
+            }
+          });
       }
   };
 

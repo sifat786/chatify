@@ -1,5 +1,4 @@
 import React, { createRef, useState } from 'react';
-import profile from '../../assets/profile.png';
 
 import {LiaHomeSolid} from 'react-icons/lia';
 import {AiFillMessage} from 'react-icons/ai';
@@ -99,14 +98,14 @@ const Sidebar = () => {
 
     <div className='bg-primary h-screen rounded-lg pt-[38px]'>
         <div className='group relative w-[100px] h-[100px] mx-auto'>
-          <img src={data.photoURL} alt="profile" className='mx-auto'/>
+          <img src={data.photoURL} alt="profile" className='mx-auto w-full h-full rounded-full'/>
           <div onClick={handleImageUpload} className='bg-shadow opacity-0 group-hover:opacity-100 rounded-full w-full h-full mx-auto     absolute top-0 left-0 flex justify-center items-center transition duration-300 ease-in-out cursor-pointer'>
               <FaCloudUploadAlt className='text-[#EBEAEA] text-[25px]'/>
           </div>
         </div>
-        <h1 className='font-sans font-bold text-[34px] text-secondary'></h1>
+        <h1 className='font-sans font-bold text-center mt-[10px] text-[28px] text-white'>{data.displayName}</h1>
         
-        <div className='relative mt-[78px] py-[20px] after:absolute after:content-[""] after:h-full after:w-full after:top-0 after:left-[25px] after:-z-10 z-10 after:bg-white after:rounded-l-lg overflow-hidden      before:absolute before:content-[""] before:h-full before:w-[8px] before:top-0 before:right-0 before:bg-primary before:rounded-l-lg after:cursor-pointer cursor-pointer'>
+        <div className='relative mt-[55px] py-[20px] after:absolute after:content-[""] after:h-full after:w-full after:top-0 after:left-[25px] after:-z-10 z-10 after:bg-white after:rounded-l-lg overflow-hidden      before:absolute before:content-[""] before:h-full before:w-[8px] before:top-0 before:right-0 before:bg-primary before:rounded-l-lg after:cursor-pointer cursor-pointer'>
           <LiaHomeSolid className='mx-auto text-5xl text-primary'/>
         </div>
         <div className='mt-[60px] cursor-pointer'>
@@ -142,10 +141,17 @@ const Sidebar = () => {
             <div className='bg-white py-[50px] px-[120px] rounded-lg'>
               <h1 className='font-sans font-bold text-[50px] text-black'>Upload Image</h1>
 
-              {/* //! cropper: */}
-              <div className='w-[100px] h-[100px] mx-auto rounded-full overflow-hidden my-[10px]'>
-                <div className='img-preview w-full h-full rounded-full'></div>
-              </div>
+            {/* //! cropper: */}
+            {
+              image ?
+                <div className='w-[100px] h-[100px] mx-auto rounded-full overflow-hidden my-[10px]'>
+                  <div className='img-preview w-full h-full rounded-full'></div>
+                </div>
+                :
+                <div className='w-[100px] h-[100px] mx-auto rounded-full overflow-hidden my-[10px]'>
+                  <img src={data.photoURL} alt="" />
+                </div>
+            }
               {
                 image &&
                   <Cropper

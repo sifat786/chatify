@@ -1,69 +1,127 @@
-import React from 'react'
-import fr1 from '../../assets/fr1.png';
-import fr2 from '../../assets/fr2.png';
-import fr3 from '../../assets/fr3.png';
-import fr4 from '../../assets/fr4.png';
-import fr5 from '../../assets/fr5.png';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 
+import fr1 from '../../assets/fr1.png';
 import {BsThreeDotsVertical} from 'react-icons/bs';
 
+
 const UserList = () => {
+
+    const db = getDatabase();
+    const [userList, setUserList] = useState([]);
+    const [friendRequestList, setFriendRequestList] = useState([]);
+    const [friendList, setFriendList] = useState([]);
+    const [blockList, setBlockList] = useState([]);
+    const data = useSelector(state => state.userLoginInfo.userInfo);
+
+    useEffect(() => {
+        const userRef = ref(db, 'users/');
+        onValue(userRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item) => {
+                if(data.uid != item.key){
+                    arr.push({ ...item.val(), userid: item.key })
+                }
+            })
+            setUserList(arr)
+        });
+    },[]);
+
+    useEffect(() => {
+        const friendRequestRef = ref(db, 'friendRequest/');
+        onValue(friendRequestRef, (snapshot) => {
+            let arr = [];
+            snapshot.forEach((item) => {
+                arr.push(item.val().receiverid + item.val().senderid);
+            })
+            setFriendRequestList(arr);
+        });
+    },[]);
+
+    useEffect(() => {
+        const friendRef = ref(db, 'friend/');
+        onValue(friendRef, (snapshot) => {
+            let arr = [];
+            snapshot.forEach((item) => {
+                arr.push(item.val().receiverid + item.val().senderid);
+            })
+            setFriendList(arr);
+        });
+    },[]);
+
+    useEffect(() => {
+        const blockRef = ref(db, 'block/');
+        onValue(blockRef, (snapshot) => {
+            let arr = [];
+            snapshot.forEach((item) => {
+                arr.push(item.val().receiverid + item.val().senderid);
+            })
+            setBlockList(arr);
+        });
+    },[]);
+
+    const handleFriendRequest = (item) => {
+        set(push(ref(db, 'friendRequest/')), {
+            receivername: item.username,
+            receiverid: item.userid,
+            sendername: data.displayName,
+            senderid: data.uid,
+        });
+    }
+
   return (
-    <div className='shadow px-[22px] w-[430px] h-[420px] overflow-y-auto rounded-lg mt-[32px]'>
+    <div className='shadow px-[22px] w-[480px] h-[420px] overflow-y-auto rounded-lg mt-[32px]'>
         <div className='flex justify-between py-[20px] items-center'>
             <h2 className='font-pops text-[20px] font-semibold'>User List</h2>
             <BsThreeDotsVertical/>
         </div>
-        <div className='flex items-center pb-[14px] border-b-2'>
-            <img src={fr1} alt="" />
-            <div className='ml-[20px] w-[150px]'>
-                <p className='font-pops text-[18px] font-semibold'>Raghav</p>
-                <p className='font-pops text-[14px] font-medium text-third'>Today, 8:56pm?</p>
-            </div>
-            <div className='ml-[20px]'>
-                <button className='px-[15px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>+</button>
-            </div>
-        </div>
-        <div className='flex items-center pt-[17px] pb-[14px] border-b-2'>
-            <img src={fr2} alt="" />
-            <div className='ml-[20px] w-[150px]'>
-                <p className='font-pops text-[18px] font-semibold'>Swathi</p>
-                <p className='font-pops text-[14px] font-medium text-third'>Today, 2:31pm</p>
-            </div>
-            <div className='ml-[20px]'>
-                <button className='px-[15px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>+</button>
-            </div>
-        </div>
-        <div className='flex items-center pt-[17px] pb-[20px] border-b-2'>
-            <img src={fr3} alt="" />
-            <div className='ml-[20px] w-[150px]'>
-                <p className='font-pops text-[18px] font-semibold'>Kiran</p>
-                <p className='font-pops text-[14px] font-medium text-third'>Yesterday, 6:22pm</p>
-            </div>
-            <div className='ml-[20px]'>
-                <button className='px-[15px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>+</button>
-            </div>
-        </div>
-        <div className='flex items-center pt-[17px] pb-[20px] border-b-2'>
-            <img src={fr4} alt="" />
-            <div className='ml-[20px] w-[150px]'>
-                <p className='font-pops text-[18px] font-semibold'>Tejeshwini</p>
-                <p className='font-pops text-[14px] font-medium text-third'>Today, 12:22pm</p>
-            </div>
-            <div className='ml-[20px]'>
-                <button className='px-[15px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>+</button>
-            </div>
-        </div>
-        <div className='flex items-center pt-[17px] pb-[20px]'>
-            <img src={fr5} alt="" />
-            <div className='ml-[40px] w-[150px]'>
-                <p className='font-pops text-[18px] font-semibold'>Marvin</p>
-                <p className='font-pops text-[14px] font-medium text-third'>Today, 8:56pm</p>
-            </div>
-            <div className='ml-[20px]'>
-                <button className='px-[15px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>+</button>
-            </div>
-        </div>
+            {
+                userList.map((item) => (
+                    <div className='flex items-center pb-[14px] border-b-2'>
+                        <img src={fr1} alt="" />
+                        <div className='ml-[20px] w-[150px]'>
+                            <p className='font-pops text-[18px] font-semibold'>{item.username}</p>
+                            <p className='font-pops text-[14px] font-medium text-third'>{item.email}</p>
+                        </div>
+                        {
+                            blockList.includes(item.userid + data.uid) ||
+                            blockList.includes(data.uid + item.userid)
+
+
+                            ?
+
+                            <div className='ml-[90px]'>
+                            <button className='px-[15px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>B</button>
+                            </div>
+
+                            
+                            :
+
+
+                            friendList.includes(item.userid + data.uid) ||
+                            friendList.includes(data.uid + item.userid)
+                            ?
+                            <div className='ml-[90px]'>
+                            <button className='px-[15px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>Friend</button>
+                            </div>
+                            :
+                            friendRequestList.includes(item.userid + data.uid) ||
+                            friendRequestList.includes(data.uid + item.userid)
+                            ?
+                            <div className='ml-[90px]'>
+                            <button className='px-[15px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>pending</button>
+                            </div>
+                            :
+                            <div className='ml-[90px]'>
+                            <button onClick={() =>handleFriendRequest(item)} className='px-[15px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>+</button>
+                            </div>
+                        }
+    
+                                
+                    </div>
+                ))
+            }
     </div>
   )
 }
