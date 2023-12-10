@@ -25,7 +25,7 @@ const Friends = () => {
     },[]);
 
     const handleBlock = (item) => {
-        if(data.uid == item.senderid && data.uid || item.receiverid) {
+        if(data.uid == item.senderid) {
             set(push(ref(db, 'block/')),{
                 block: item.receivername,
                 blockid: item.receiverid,
@@ -41,6 +41,8 @@ const Friends = () => {
                 blockid: item.senderid,
                 blockby: item.receivername,
                 blockbyid: item.receiverid
+            }).then(() => {
+                remove(ref(db, 'friend/' + item.id))
             })
         }
     }

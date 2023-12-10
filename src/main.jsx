@@ -10,6 +10,7 @@ import {
 import Registration from './pages/Registration/Registration';
 import Login from './pages/Login/Login';
 import Home from './pages/Home/Home';
+import Message from './pages/Message/Message';
 import firebaseConfig from './authentication/firebaseConfig';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Home/> ,
+  },
+  {
+    path: "/message",
+    element: <Message/> ,
   },
   {
     path: "/registration",

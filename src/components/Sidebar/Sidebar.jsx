@@ -8,7 +8,7 @@ import {IoLogOutOutline} from 'react-icons/io5';
 import {FaCloudUploadAlt} from 'react-icons/fa';
 
 import { getAuth, signOut, updateProfile } from "firebase/auth";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { Cropper } from 'react-cropper';
 import "cropperjs/dist/cropper.css";
@@ -16,7 +16,7 @@ import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage"
 import { useSelector } from 'react-redux';
 
 
-const Sidebar = () => {
+const Sidebar = ({active}) => {
 
   const navigate = useNavigate();
   const auth = getAuth();
@@ -105,18 +105,26 @@ const Sidebar = () => {
         </div>
         <h1 className='font-sans font-bold text-center mt-[10px] text-[28px] text-white'>{data.displayName}</h1>
         
-        <div className='relative mt-[55px] py-[20px] after:absolute after:content-[""] after:h-full after:w-full after:top-0 after:left-[25px] after:-z-10 z-10 after:bg-white after:rounded-l-lg overflow-hidden      before:absolute before:content-[""] before:h-full before:w-[8px] before:top-0 before:right-0 before:bg-primary before:rounded-l-lg after:cursor-pointer cursor-pointer'>
-          <LiaHomeSolid className='mx-auto text-5xl text-primary'/>
+        <div className={`relative mt-[55px] py-[20px] after:absolute after:content-[""] after:h-full after:w-full after:top-0 after:left-[25px] after:-z-10 z-10 ${ active == 'home' && 'after:bg-white' } after:rounded-l-lg overflow-hidden      before:absolute before:content-[""] before:h-full before:w-[8px] before:top-0 before:right-0 before:bg-primary before:rounded-l-lg after:cursor-pointer cursor-pointer`}>
+          <Link to='/' >
+          <LiaHomeSolid className={`mx-auto text-5xl ${ active == 'home' ? 'text-primary' : 'text-white' }`}/>
+          </Link>
         </div>
-        <div className='mt-[60px] cursor-pointer'>
-          <AiFillMessage className='mx-auto text-5xl text-[#BAD1FF]'/>
+
+        <div className={`relative mt-[60px] py-[20px] after:absolute after:content-[""] after:h-full after:w-full after:top-0 after:left-[25px] after:-z-10 z-10 ${ active == 'message' && 'after:bg-white' } after:rounded-l-lg overflow-hidden      before:absolute before:content-[""] before:h-full before:w-[8px] before:top-0 before:right-0 before:bg-primary before:rounded-l-lg after:cursor-pointer cursor-pointer`}>
+          <Link to='/message' >
+          <AiFillMessage className={`mx-auto text-5xl ${ active == 'message' ? 'text-primary' : 'text-[#BAD1FF]' }`}/>
+          </Link>
         </div>
+
         <div className='mt-[80px] cursor-pointer'>
           <IoIosNotificationsOutline className='mx-auto text-5xl text-[#BAD1FF]'/>
         </div>
+
         <div className='mt-[80px] cursor-pointer'>
           <FiSettings className='mx-auto text-5xl text-[#BAD1FF]'/>
         </div>
+
         <div className='mt-[75px] cursor-pointer'>
           <IoLogOutOutline onClick={handleSignOut} className='mx-auto text-5xl text-white'/>
 

@@ -39,6 +39,9 @@ const FriendRequest = () => {
             <BsThreeDotsVertical/>
         </div>
         {
+            friendRequestList.length == 0 ?
+            <h1 className='text-red-700'>Data Not Found !</h1>
+            :
             friendRequestList.map((item) => (
                 <div className='flex items-center pb-[14px] border-b-2'>
                     <img src={fr1} alt="" />

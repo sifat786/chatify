@@ -20,13 +20,13 @@ const Unblock = () => {
                     arr.push({
                         id: item.key,
                         block: item.val().block,
-                        blockid: item.val().blockid
+                        blockid: item.val().blockid,
                     })
                 }else if(item.val().blockid == data.uid) {
                     arr.push({
                         id: item.key,
                         blockby: item.val().blockby,
-                        blockbyid: item.val().blockbyid
+                        blockbyid: item.val().blockbyid,
                     })
                 }
             })
@@ -36,6 +36,14 @@ const Unblock = () => {
 
     const handleUnblock = (item) => {
         console.log(item);
+        set(push(ref(db, 'friend/')),{
+            sendername: item.block,
+            senderid: item.blockid,
+            receivername: data.displayName,
+            receiverid: data.uid
+        }).then(() => {
+            remove(ref(db, 'block/' + item.id))
+        })
     }
 
   return (
@@ -54,7 +62,10 @@ const Unblock = () => {
                         <p className='font-pops text-[14px] font-medium text-third'>Today, 8:56pm?</p>
                     </div>
                     <div className='ml-[20px]'>
-                        <button onClick={()=>handleUnblock(item)} className='px-[25px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>Unblock</button>
+                        {
+                            !item.blockby && 
+                            <button onClick={()=>handleUnblock(item)} className='px-[25px] py-[2px] bg-primary rounded-md   font-pops text-[20px] font-semibold text-white'>Unblock</button>
+                        }
                     </div>
                 </div>
             ))
